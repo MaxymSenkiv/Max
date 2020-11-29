@@ -1,4 +1,5 @@
 from flask import Flask
+from wsgiref.simple_server import make_server
 app = Flask(__name__)
 
 
@@ -11,5 +12,11 @@ def hello_world():
 def start():
     return 'Hello World 25'
 
-if __name__ == '__main__':
-    app.run()
+
+with make_server('', 5000, app) as server:
+    print("Server is running")
+
+    server.serve_forever()
+
+# if __name__ == '__main__':
+#     app.run()
