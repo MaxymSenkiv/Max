@@ -19,7 +19,7 @@ ROOT_PATH = os.path.join(current_path, '..')
 sys.path.append(ROOT_PATH)
 from models import Base,engine
 
-# add your model's MetaData object here
+# add your models MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata

@@ -13,6 +13,6 @@ session1.commit()
 session1.close()
 
 # psql -h localhost -d musiclist -U postgres -p 5432 -a -q -f create_tables.sql
-# python add_models.py - чекнути пгадмін
+# python add_models.py 
 # alembic revision --autogenerate
 # alembic upgrade head
