@@ -11,15 +11,16 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "users"
 
-    user_id = Column('user_id',Integer,primary_key=True)
-    name = Column('name',String)
+    id = Column('id',Integer,primary_key=True)
+    username = Column('name',String)
     email = Column('email',String,unique=True)
     password = Column('password',String)
 
 class Playlist(Base):
-    __tablename__ = 'playlist'
+    __tablename__ = 'playlists'
 
-    playlist_id = Column('playlist_id',Integer,primary_key=True)
+    id = Column('id',Integer,primary_key=True)
     name = Column('name',String)
-    owner_id = Column('owner_id',Integer,ForeignKey(User.user_id))
+    owner_id = Column('owner_id',Integer,ForeignKey(User.id))
     songs = Column('songs',ARRAY(String))
+    ststus = Column('status', String)
