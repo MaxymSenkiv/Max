@@ -1,22 +1,26 @@
 from flask import Flask
-from wsgiref.simple_server import make_server
+from blueprints import blpr
+
+
+def db_error():
+    return jsonify(
+        {
+            "code": 500,
+            "type": "DATABASE_ERROR",
+        }
+    )
+
 app = Flask(__name__)
 
+app.register_blueprint(blpr, url_prefix="/music")
+
+app.register_error_handler(Exception, db_error)
 
 @app.route('/')
 def hello_world():
-    return 'Hello World'
+    return 'Home Page'
 
 
-@app.route('/api/v1/hello-world-25')
-def start():
-    return 'Hello World 25'
+if __name__ == '__main__':
+    app.run(debug = True)
 
-
-with make_server('', 5000, app) as server:
-    print("Server is running")
-
-    server.serve_forever()
-
-# if __name__ == '__main__':
-#     app.run()

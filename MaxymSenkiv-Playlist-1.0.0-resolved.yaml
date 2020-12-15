@@ -1,12 +1,19 @@
----
 openapi: 3.0.0
 info:
   title: Playlist service
   description: This is a playlist service
   version: 1.0.0
 servers:
+# Added by API Auto Mocking Plugin
+- description: SwaggerHub API Auto Mocking
+  url: https://virtserver.swaggerhub.com/BogdanKalysh/Max_music/1.0.0
 - url: https://virtserver.swaggerhub.com/MaxymSenkiv/Playlist/1.0.0
   description: SwaggerHub API Auto Mocking
+  
+tags:
+  - name: user
+  - name: playlist
+  
 paths:
   /user:
     post:
@@ -69,8 +76,8 @@ paths:
           description: successful operation
       security:
       - owner_auth:
-        - Private:Playlist
-  /user/{username}:
+        - LoggedUser
+  /user/{userId}:
     delete:
       tags:
       - user
@@ -78,7 +85,7 @@ paths:
       description: This can only be done by the logged in user.
       operationId: deleteUser
       parameters:
-      - name: username
+      - name: userId
         in: path
         description: The name that needs to be deleted
         required: true
@@ -95,33 +102,37 @@ paths:
           description: User not found
       security:
       - owner_auth:
-        - Private:Playlist
-  /PrivatePlaylist:
+        - LoggedUser
+        
+  /Playlist:
     post:
       tags:
-      - PrivatePlaylist
-      summary: Create PrivatePlaylist
-      operationId: createPrivatePlaylist
+      - playlist
+      summary: Create Playlist
+      operationId: Create Playlist
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PrivatePlaylist'
+              $ref: '#/components/schemas/Playlist'
       responses:
         "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PrivatePlaylist'
-  /PrivatePlaylist/{PrivatePlaylistId}:
+                $ref: '#/components/schemas/Playlist'
+      security:
+      - owner_auth:
+        - LoggedUser
+  /Playlist/{PlaylistId}:
     get:
       tags:
-      - PrivatePlaylist
+      - playlist
       summary: Get info about playlist by id
-      operationId: GetPrivatePlaylist
+      operationId: GetPlaylist
       parameters:
-      - name: PrivatePlaylistId
+      - name: PlaylistId
         in: path
         description: id of PrivatePlaylist
         required: true
@@ -136,35 +147,32 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PrivatePlaylist'
+                $ref: '#/components/schemas/Playlist'
         "400":
-          description: Invalid PrivatePlaylistId supplied
+          description: No Access to playlist
         "404":
-          description: PrivatePlaylist not found
-      security:
-      - owner_auth:
-        - Private:Playlist
+          description: Playlist not found
     put:
       tags:
-      - PrivatePlaylist
-      summary: Updated PrivatePlaylist
+      - playlist
+      summary: Updated Playlist
       description: This can only be done by the logged in owner of the playlist.
-      operationId: updatePrivatePlaylist
+      operationId: update Playlist
       parameters:
-      - name: PrivatePlaylistId
+      - name: PlaylistId
         in: path
-        description: PrivatePlaylist that need to be updated
+        description: Playlist that need to be updated
         required: true
         style: simple
         explode: false
         schema:
           type: string
       requestBody:
-        description: Updated PrivatePlaylist object
+        description: Updated Playlist object
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PrivatePlaylist'
+              $ref: '#/components/schemas/Playlist'
         required: true
       responses:
         "200":
@@ -172,22 +180,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PrivatePlaylist'
+                $ref: '#/components/schemas/Playlist'
         "400":
           description: Invalid PrivatePlaylist supplied
         "404":
           description: PrivatePlaylist not found
       security:
       - owner_auth:
-        - Private:Playlist
+        - LoggedUser
     delete:
       tags:
-      - PrivatePlaylist
-      summary: Delete PrivatePlaylist
+      - playlist
+      summary: Delete Playlist
       description: This can only be done by the logged in owner of the playlist.
-      operationId: deletePrivatePlaylist
+      operationId: delete Playlist
       parameters:
-      - name: PrivatePlaylistId
+      - name: PlaylistId
         in: path
         description: The name that needs to be deleted
         required: true
@@ -204,116 +212,9 @@ paths:
           description: PrivatePlaylist not found
       security:
       - owner_auth:
-        - Private:Playlist
-  /PublicPlaylist:
-    post:
-      tags:
-      - PublicPlaylist
-      summary: Create PublicPlaylist
-      operationId: createPublicPlaylist
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PublicPlaylist'
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicPlaylist'
-      security:
-      - owner_auth:
-        - Public:Playlist
-  /PublicPlaylist/{PublicPlaylistId}:
-    get:
-      tags:
-      - PublicPlaylist
-      summary: Get info about playlist by id
-      operationId: GetPublicPlaylist
-      parameters:
-      - name: PublicPlaylistId
-        in: path
-        description: id of PublicPlaylist
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicPlaylist'
-        "400":
-          description: Invalid PublicPlaylistId supplied
-        "404":
-          description: PublicPlaylist not found
-    put:
-      tags:
-      - PublicPlaylist
-      summary: Updated PublicPlaylist
-      description: This can only be done by the logged in user.
-      operationId: updatePublicPlaylist
-      parameters:
-      - name: PublicPlaylistId
-        in: path
-        description: PublicPlaylist that need to be updated
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        description: Updated PublicPlaylist object
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PublicPlaylist'
-        required: true
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicPlaylist'
-        "400":
-          description: Invalid PublicPlaylist supplied
-        "404":
-          description: PublicPlaylist not found
-      security:
-      - owner_auth:
-        - Public:Playlist
-    delete:
-      tags:
-      - PublicPlaylist
-      summary: Delete PublicPlaylist
-      description: This can only be done by the logged in user.
-      operationId: deletePublicPlaylist
-      parameters:
-      - name: PublicPlaylistId
-        in: path
-        description: The name that needs to be deleted
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      responses:
-        "200":
-          description: successful operation
-        "400":
-          description: Invalid PublicPlaylistId supplied
-        "404":
-          description: PublicPlaylist not found
-      security:
-      - owner_auth:
-        - Public:Playlist
+        - LoggedUser
+        
+        
 components:
   schemas:
     User:
@@ -330,32 +231,24 @@ components:
           type: string
       xml:
         name: User
-    PrivatePlaylist:
+    Playlist:
       type: object
       properties:
         id:
           type: integer
           format: int64
+        name:
+          type: string
         playlist:
           type: array
           items:
             type: string
-        owner:
-          $ref: '#/components/schemas/User'
-      xml:
-        name: PrivatePlaylist
-    PublicPlaylist:
-      type: object
-      properties:
-        id:
+        owner id:
           type: integer
           format: int64
-        playlist:
-          type: array
-          items:
-            type: string
-      xml:
-        name: PublicPlaylist
+        status: 
+          type: string
+        
   securitySchemes:
     owner_auth:
       type: oauth2
@@ -363,5 +256,4 @@ components:
         implicit:
           authorizationUrl: 'http:'
           scopes:
-            Private:Playlist: owner modify and see his private playlist in his account
-            Public:Playlist: logged user modify and see public playlist
+            LoggedUser: operations for logged user
