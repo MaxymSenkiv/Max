@@ -1,10 +1,259 @@
 openapi: 3.0.0
 info:
+  title: Playlist service
+  description: This is a playlist service
   version: 1.0.0
-  title: playlists
-  description: music player
-paths: {}
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/BogdanKalysh/Max_music/1.0.0
+# Added by API Auto Mocking Plugin
+- description: SwaggerHub API Auto Mocking
+  url: https://virtserver.swaggerhub.com/BogdanKalysh/Max_music/1.0.0
+- url: https://virtserver.swaggerhub.com/MaxymSenkiv/Playlist/1.0.0
+  description: SwaggerHub API Auto Mocking
+  
+tags:
+  - name: user
+  - name: playlist
+  
+paths:
+  /user:
+    post:
+      tags:
+      - user
+      summary: Create user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /user/login:
+    get:
+      tags:
+      - user
+      summary: Logs user into the system
+      operationId: loginUser
+      parameters:
+      - name: username
+        in: query
+        description: The user name for login
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: password
+        in: query
+        description: The password for login in clear text
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Invalid username/password supplied
+  /user/logout:
+    get:
+      tags:
+      - user
+      summary: Logs out current logged in user session
+      operationId: logoutUser
+      responses:
+        default:
+          description: successful operation
+      security:
+      - owner_auth:
+        - LoggedUser
+  /user/{userId}:
+    delete:
+      tags:
+      - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+      - name: userId
+        in: path
+        description: The name that needs to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: User not found
+      security:
+      - owner_auth:
+        - LoggedUser
+        
+  /Playlist:
+    post:
+      tags:
+      - playlist
+      summary: Create Playlist
+      operationId: Create Playlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Playlist'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+      security:
+      - owner_auth:
+        - LoggedUser
+  /Playlist/{PlaylistId}:
+    get:
+      tags:
+      - playlist
+      summary: Get info about playlist by id
+      operationId: GetPlaylist
+      parameters:
+      - name: PlaylistId
+        in: path
+        description: id of PrivatePlaylist
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+        "400":
+          description: No Access to playlist
+        "404":
+          description: Playlist not found
+    put:
+      tags:
+      - playlist
+      summary: Updated Playlist
+      description: This can only be done by the logged in owner of the playlist.
+      operationId: update Playlist
+      parameters:
+      - name: PlaylistId
+        in: path
+        description: Playlist that need to be updated
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated Playlist object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Playlist'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+        "400":
+          description: Invalid PrivatePlaylist supplied
+        "404":
+          description: PrivatePlaylist not found
+      security:
+      - owner_auth:
+        - LoggedUser
+    delete:
+      tags:
+      - playlist
+      summary: Delete Playlist
+      description: This can only be done by the logged in owner of the playlist.
+      operationId: delete Playlist
+      parameters:
+      - name: PlaylistId
+        in: path
+        description: The name that needs to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid PrivatePlaylistId supplied
+        "404":
+          description: PrivatePlaylist not found
+      security:
+      - owner_auth:
+        - LoggedUser
+        
+        
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      xml:
+        name: User
+    Playlist:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        playlist:
+          type: array
+          items:
+            type: string
+        owner id:
+          type: integer
+          format: int64
+        status: 
+          type: string
+        
+  securitySchemes:
+    owner_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'http:'
+          scopes:
+            LoggedUser: operations for logged user
