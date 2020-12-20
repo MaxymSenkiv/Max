@@ -14,6 +14,7 @@ app = Flask(__name__)
 
 app.register_blueprint(blpr, url_prefix="/music")
 
+
 app.register_error_handler(Exception, db_error)
 
 @app.route('/')
