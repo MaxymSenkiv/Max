@@ -15,6 +15,7 @@ class UserInfo(Schema):
     username = fields.String()
     email = fields.Email()
 
+
 class NewPlayList(Schema):
     name = fields.String(required = True)
     owner_id = fields.Integer(required = True)

@@ -36,6 +36,10 @@ def logout_user():
 def del_user(id):
     try:
         session = Session()
+
+        if session.query(PlayList).filter_by(id=id) == NULL:
+            return(jsonify({"code": 400 ,"error": "Wrong id"}))
+
         session.query(User).filter_by(id=id).delete()
         session.commit()
     except Exception:
@@ -80,6 +84,7 @@ def put_playlist(id):
 
         for key, value in playlist_data.items():
             setattr(orig_playlist_data, key, value)
+            
         session.commit()
     except Exception:
         return(jsonify({"code": 400 ,"error": "Wrong playlist data"}))
@@ -91,9 +96,14 @@ def put_playlist(id):
 def del_playlist(id):
     try:
         session = Session()
+
+        if session.query(PlayList).filter_by(id=id) == NULL:
+            return(jsonify({"code": 400 ,"error": "Wrong playlist id"}))
+
         session.query(PlayList).filter_by(id=id).delete()
         session.commit()
     except Exception:
         return(jsonify({"code": 400 ,"error": "Wrong playlist id"}))
 
     return jsonify({"Playlist deleted ": 200})
+    
