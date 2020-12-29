@@ -42,13 +42,15 @@ def del_user(id):
     try:
         session = Session()
         user = auth.current_user()
+        
         if user.id != id:
             return (jsonify({"code": 400, "error": "It is not your user"}))
         if session.query(User).filter_by(id=id).one() == None:
             return(jsonify({"code": 400 ,"error": "Wrong id"}))
-
+        
         session.query(User).filter_by(id=id).delete()
         session.commit()
+
     except Exception:
         return(jsonify({"code": 400 ,"error": "Wrong id"}))
     return jsonify({"User deleted ": 200})
@@ -118,6 +120,7 @@ def del_playlist(id):
     try:
         session = Session()
         playlist_obj = session.query(PlayList).filter_by(id=id).one()
+        
         if playlist_obj.status == 'private':
             user = auth.current_user()
             if user.id != playlist_obj.owner_id:

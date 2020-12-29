@@ -22,7 +22,6 @@ class User(Base):
         self.username = username
         self.email = email
         self.password = generate_password_hash(password)
-    
 
 
 class PlayList(Base):
