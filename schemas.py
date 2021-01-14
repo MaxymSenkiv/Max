@@ -18,7 +18,7 @@ class UserInfo(Schema):
 
 class NewPlayList(Schema):
     name = fields.String(required = True)
-    # owner_id = fields.Integer(required = True)
+    owner_id = fields.Integer(required = True)
     songs = fields.List(fields.String())
     status = fields.String(required = True)
 
