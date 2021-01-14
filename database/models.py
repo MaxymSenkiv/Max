@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-engine = create_engine("postgresql://postgres:29.03.2002@localhost/musiclist", echo = True)
+engine = create_engine("postgresql://postgres:147896325@localhost/musiclist", echo = True)
 
 Session = sessionmaker(bind=engine)
 
